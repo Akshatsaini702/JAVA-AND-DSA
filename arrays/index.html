@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InAmigos Foundation — Uniting Minds for a Change</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+/* ============ TOKENS ============ */
+:root{
+  --ink:        #16241C;
+  --ink-soft:   #20322A;
+  --paper:      #F6F1E6;
+  --paper-deep: #ECE3CF;
+  --moss:       #2F4A3A;
+  --moss-soft:  #4C6B58;
+  --brass:      #BD9456;
+  --brass-deep: #8C652E;
+  --brass-pale: #E4C99A;
+  --clay:       #B5573B;
+  --text-dark:  #221F1A;
+  --text-on-ink:#F2ECDD;
+  --line:       rgba(34,31,26,0.13);
+  --line-ink:   rgba(242,236,221,0.16);
+
+  --display: "Fraunces", Georgia, serif;
+  --body:    "Work Sans", -apple-system, sans-serif;
+
+  --fs-hero:  clamp(2.6rem, 6vw, 5rem);
+  --fs-h2:    clamp(2rem, 4vw, 3.1rem);
+  --fs-h3:    clamp(1.4rem, 2.2vw, 1.9rem);
+  --fs-stat:  clamp(2.4rem, 5vw, 3.6rem);
+  --fs-quote: clamp(1.6rem, 3.2vw, 2.6rem);
+
+  --maxw: 1180px;
+}
+
+/* ============ RESET ============ */
+*,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+html{ scroll-behavior:smooth; }
+body{
+  font-family:var(--body);
+  color:var(--text-dark);
+  background:var(--paper);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+img,svg{ display:block; max-width:100%; }
+a{ color:inherit; text-decoration:none; }
+ul{ list-style:none; }
+h1,h2,h3{ font-family:var(--display); font-weight:500; line-height:1.08; }
+.container{
+  width:100%;
+  max-width:var(--maxw);
+  margin:0 auto;
+  padding:0 32px;
+}
+::selection{ background:var(--brass-pale); color:var(--ink); }
+:focus-visible{ outline:2px solid var(--brass); outline-offset:3px; }
+
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  font-size:0.78rem;
+  font-weight:600;
+  letter-spacing:0.16em;
+  text-transform:uppercase;
+  color:var(--brass-deep);
+}
+.eyebrow::before{
+  content:"";
+  width:22px;
+  height:1px;
+  background:var(--brass-deep);
+  display:inline-block;
+}
+.eyebrow.on-ink{ color:var(--brass-pale); }
+.eyebrow.on-ink::before{ background:var(--brass-pale); }
+
+/* ============ BUTTONS ============ */
+.btn{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:15px 30px;
+  font-family:var(--body);
+  font-size:0.95rem;
+  font-weight:600;
+  letter-spacing:0.02em;
+  border-radius:2px;
+  border:1px solid transparent;
+  cursor:pointer;
+  transition:transform .35s ease, background-color .35s ease, color .35s ease, border-color .35s ease;
+}
+.btn-primary{
+  background:var(--brass);
+  color:var(--ink);
+}
+.btn-primary:hover{
+  background:var(--brass-pale);
+  transform:translateY(-2px);
+}
+.btn-ghost{
+  background:transparent;
+  color:var(--text-on-ink);
+  border-color:var(--line-ink);
+}
+.btn-ghost:hover{
+  border-color:var(--brass-pale);
+  color:var(--brass-pale);
+  transform:translateY(-2px);
+}
+.btn-outline-dark{
+  background:transparent;
+  color:var(--moss);
+  border-color:var(--moss);
+}
+.btn-outline-dark:hover{
+  background:var(--moss);
+  color:var(--paper);
+  transform:translateY(-2px);
+}
+
+/* ============ ANIMATIONS ============ */
+@keyframes fadeUp{
+  from{ opacity:0; transform:translateY(18px); }
+  to{ opacity:1; transform:translateY(0); }
+}
+@keyframes floatDot{
+  0%,100%{ transform:translateY(0) scale(1); opacity:.85; }
+  50%{ transform:translateY(-10px) scale(1.08); opacity:1; }
+}
+@keyframes drawLine{
+  to{ stroke-dashoffset:0; }
+}
+@keyframes pulseRing{
+  0%{ transform:scale(0.9); opacity:.5; }
+  70%{ transform:scale(1.4); opacity:0; }
+  100%{ opacity:0; }
+}
+
+.reveal{
+  animation:fadeUp .9s cubic-bezier(.2,.7,.3,1) both;
+}
+.d1{ animation-delay:.05s; }
+.d2{ animation-delay:.2s; }
+.d3{ animation-delay:.35s; }
+.d4{ animation-delay:.5s; }
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; scroll-behavior:auto !important; }
+}
+
+/* scroll-driven reveal for browsers that support it; harmless fallback elsewhere */
+@supports (animation-timeline: view()){
+  .scroll-reveal{
+    opacity:0;
+    transform:translateY(28px);
+    animation: fadeUp linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 30%;
+  }
+}
+
+/* ============ NAV ============ */
+.site-nav{
+  position:sticky;
+  top:0;
+  z-index:50;
+  background:rgba(246,241,230,0.92);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+}
+.site-nav .container{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding-top:18px;
+  padding-bottom:18px;
+}
+.brandmark{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.brand-dots{ width:30px; height:30px; flex-shrink:0; }
+.brand-text{
+  font-family:var(--display);
+  font-style:italic;
+  font-size:1.3rem;
+  color:var(--ink);
+  line-height:1;
+}
+.brand-text span{
+  display:block;
+  font-family:var(--body);
+  font-style:normal;
+  font-size:0.6rem;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--moss-soft);
+  margin-top:3px;
+}
+.nav-links{
+  display:flex;
+  align-items:center;
+  gap:34px;
+  flex-wrap:wrap;
+}
+.nav-links a{
+  position:relative;
+  font-size:0.92rem;
+  font-weight:500;
+  color:var(--text-dark);
+  padding-bottom:4px;
+}
+.nav-links a::after{
+  content:"";
+  position:absolute;
+  left:0; bottom:0;
+  width:0%;
+  height:1px;
+  background:var(--brass-deep);
+  transition:width .3s ease;
+}
+.nav-links a:hover::after{ width:100%; }
+.nav-cta{
+  padding:11px 22px;
+  font-size:0.85rem;
+}
+
+/* ============ HERO ============ */
+.hero{
+  background:var(--ink);
+  color:var(--text-on-ink);
+  position:relative;
+  overflow:hidden;
+  padding:96px 0 100px;
+}
+.hero .container{
+  display:grid;
+  grid-template-columns:1.15fr 0.85fr;
+  gap:48px;
+  align-items:center;
+}
+.hero-copy h1{
+  margin-top:18px;
+  font-size:var(--fs-hero);
+  color:var(--text-on-ink);
+}
+.hero-copy h1 em{
+  font-style:italic;
+  color:var(--brass-pale);
+  font-weight:400;
+}
+.hero-copy p{
+  margin-top:26px;
+  max-width:46ch;
+  font-size:1.08rem;
+  color:rgba(242,236,221,0.78);
+}
+.hero-actions{
+  display:flex;
+  gap:16px;
+  margin-top:38px;
+  flex-wrap:wrap;
+}
+
+.constellation{ width:100%; height:auto; }
+.constellation .node{
+  animation:floatDot 5.5s ease-in-out infinite;
+}
+.constellation .ring{
+  transform-origin:center;
+  animation:pulseRing 4.5s ease-out infinite;
+}
+.constellation .wire{
+  stroke-dasharray:300;
+  stroke-dashoffset:300;
+  animation:drawLine 2.4s ease forwards;
+}
+
+/* ============ ABOUT ============ */
+.about{
+  padding:108px 0;
+  border-bottom:1px solid var(--line);
+}
+.about .container{
+  display:grid;
+  grid-template-columns:0.85fr 1.15fr;
+  gap:64px;
+}
+.about h2{
+  font-size:var(--fs-h2);
+  color:var(--ink);
+  margin-top:16px;
+}
+.about-body p{
+  font-size:1.05rem;
+  color:#3c382f;
+  max-width:62ch;
+}
+.about-body p + p{ margin-top:18px; }
+.value-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:30px;
+}
+.value-chip{
+  font-size:0.78rem;
+  font-weight:600;
+  letter-spacing:0.05em;
+  text-transform:uppercase;
+  padding:9px 16px;
+  border:1px solid var(--moss);
+  color:var(--moss);
+  border-radius:2px;
+}
+
+/* ============ STATS ============ */
+.stats{
+  background:var(--ink);
+  color:var(--text-on-ink);
+  padding:72px 0;
+}
+.stats .container{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+}
+.stat{
+  text-align:center;
+  padding:0 18px;
+  border-left:1px solid var(--line-ink);
+}
+.stat:first-child{ border-left:none; }
+.stat .num{
+  font-family:var(--display);
+  font-size:var(--fs-stat);
+  color:var(--brass-pale);
+}
+.stat .label{
+  margin-top:8px;
+  font-size:0.78rem;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:rgba(242,236,221,0.65);
+}
+
+/* ============ PROGRAMS ============ */
+.programs{
+  padding:120px 0 80px;
+}
+.programs-head{
+  max-width:680px;
+  margin-bottom:64px;
+}
+.programs-head h2{
+  font-size:var(--fs-h2);
+  color:var(--ink);
+  margin-top:16px;
+}
+.programs-head p{
+  margin-top:18px;
+  font-size:1.05rem;
+  color:#3c382f;
+}
+
+.program-row{
+  display:grid;
+  grid-template-columns:120px 1fr;
+  gap:36px;
+  align-items:flex-start;
+  padding:42px 0;
+  border-top:1px solid var(--line);
+  transition:padding-left .4s ease;
+}
+.program-row:last-child{ border-bottom:1px solid var(--line); }
+.program-row:hover{ padding-left:8px; }
+
+.icon-frame{
+  width:96px;
+  height:96px;
+  border-radius:50%;
+  border:1px solid var(--brass);
+  background:var(--paper-deep);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--moss);
+  transition:transform .45s ease, background-color .45s ease, color .45s ease;
+}
+.program-row:hover .icon-frame{
+  transform:scale(1.07) rotate(-4deg);
+  background:var(--brass);
+  color:var(--ink);
+}
+.icon-frame svg{ width:44px; height:44px; }
+
+.program-meta{
+  display:flex;
+  align-items:baseline;
+  gap:14px;
+  flex-wrap:wrap;
+}
+.program-num{
+  font-family:var(--display);
+  font-style:italic;
+  font-size:1.1rem;
+  color:var(--brass-deep);
+}
+.program-tag{
+  font-size:0.74rem;
+  font-weight:600;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--moss-soft);
+}
+.program-row h3{
+  margin-top:8px;
+  font-size:var(--fs-h3);
+  color:var(--ink);
+}
+.program-row p{
+  margin-top:10px;
+  max-width:62ch;
+  color:#3c382f;
+  font-size:1rem;
+}
+
+/* ============ QUOTE / ACHIEVEMENT ============ */
+.quote-band{
+  background:var(--paper-deep);
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  padding:96px 0;
+}
+.quote-band .container{
+  max-width:840px;
+  text-align:center;
+}
+.quote-band blockquote{
+  font-family:var(--display);
+  font-style:italic;
+  font-weight:400;
+  font-size:var(--fs-quote);
+  color:var(--ink);
+  line-height:1.3;
+}
+.quote-band blockquote::before{ content:"“"; color:var(--brass); }
+.quote-band blockquote::after{ content:"”"; color:var(--brass); }
+.quote-band .quote-sub{
+  margin-top:24px;
+  font-size:0.85rem;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--moss-soft);
+}
+
+/* ============ GET INVOLVED ============ */
+.involve{
+  background:var(--ink);
+  color:var(--text-on-ink);
+  padding:120px 0;
+}
+.involve-head{
+  max-width:620px;
+  margin-bottom:60px;
+}
+.involve-head h2{
+  font-size:var(--fs-h2);
+  color:var(--text-on-ink);
+  margin-top:16px;
+}
+.involve-head p{
+  margin-top:18px;
+  color:rgba(242,236,221,0.75);
+  font-size:1.05rem;
+}
+.involve-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1px;
+  background:var(--line-ink);
+  border:1px solid var(--line-ink);
+}
+.involve-card{
+  background:var(--ink);
+  padding:42px 34px;
+  transition:background-color .4s ease, transform .4s ease;
+}
+.involve-card:hover{
+  background:var(--ink-soft);
+  transform:translateY(-6px);
+}
+.involve-card .num{
+  font-family:var(--display);
+  font-style:italic;
+  font-size:1.3rem;
+  color:var(--brass-pale);
+}
+.involve-card h3{
+  margin-top:18px;
+  font-size:1.4rem;
+  color:var(--text-on-ink);
+  font-weight:500;
+}
+.involve-card p{
+  margin-top:12px;
+  font-size:0.96rem;
+  color:rgba(242,236,221,0.7);
+  min-height:66px;
+}
+.involve-card .btn{
+  margin-top:22px;
+  width:100%;
+  justify-content:center;
+  padding:13px 20px;
+  font-size:0.86rem;
+}
+
+/* ============ FOOTER ============ */
+.site-footer{
+  padding:64px 0 40px;
+}
+.footer-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  flex-wrap:wrap;
+  gap:28px;
+  padding-bottom:36px;
+  border-bottom:1px solid var(--line);
+}
+.footer-tagline{
+  margin-top:10px;
+  font-size:0.92rem;
+  color:var(--moss-soft);
+  max-width:32ch;
+}
+.footer-links{
+  display:flex;
+  gap:28px;
+  flex-wrap:wrap;
+}
+.footer-links a{
+  font-size:0.88rem;
+  color:var(--text-dark);
+  border-bottom:1px solid transparent;
+  transition:border-color .3s ease, color .3s ease;
+}
+.footer-links a:hover{
+  border-color:var(--brass-deep);
+  color:var(--brass-deep);
+}
+.footer-bottom{
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:10px;
+  padding-top:24px;
+  font-size:0.78rem;
+  color:#766f5f;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:920px){
+  .hero .container{ grid-template-columns:1fr; }
+  .constellation{ max-width:340px; margin-top:20px; }
+  .about .container{ grid-template-columns:1fr; gap:30px; }
+  .stats .container{ grid-template-columns:repeat(2,1fr); row-gap:34px; }
+  .stat:nth-child(3){ border-left:none; }
+  .program-row{ grid-template-columns:76px 1fr; gap:22px; }
+  .icon-frame{ width:72px; height:72px; }
+  .icon-frame svg{ width:34px; height:34px; }
+  .involve-grid{ grid-template-columns:1fr; }
+}
+@media (max-width:640px){
+  .container{ padding:0 22px; }
+  .nav-links{ display:none; }
+  .site-nav .container{ justify-content:space-between; }
+  .nav-cta{ display:inline-flex; }
+  .hero{ padding:64px 0 70px; }
+  .hero-actions{ flex-direction:column; }
+  .hero-actions .btn{ justify-content:center; }
+  .footer-top{ flex-direction:column; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header class="site-nav" id="top">
+  <div class="container">
+    <a class="brandmark" href="#top" aria-label="InAmigos Foundation home">
+      <svg class="brand-dots" viewBox="0 0 40 40" aria-hidden="true">
+        <circle cx="20" cy="8"  r="5" fill="#BD9456"/>
+        <circle cx="32" cy="20" r="5" fill="#2F4A3A"/>
+        <circle cx="20" cy="32" r="5" fill="#B5573B"/>
+        <circle cx="8"  cy="20" r="5" fill="#4C6B58"/>
+        <circle cx="20" cy="20" r="4" fill="#16241C"/>
+      </svg>
+      <span class="brand-text">InAmigos<span>Foundation</span></span>
+    </a>
+    <nav class="nav-links">
+      <a href="#top">Home</a>
+      <a href="#programs">Programs</a>
+      <a href="#impact">Impact</a>
+      <a href="#get-involved">Get Involved</a>
+    </nav>
+    <a class="btn btn-outline-dark nav-cta" href="#get-involved">Volunteer</a>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-copy">
+      <span class="eyebrow on-ink reveal d1">Volunteer-Led NGO</span>
+      <h1 class="reveal d2">Uniting minds<br><em>for a change.</em></h1>
+      <p class="reveal d3">InAmigos Foundation turns everyday goodwill into six working programs — feeding families, schooling children, rescuing animals, training women, restoring land, and building careers for the youth who run it all.</p>
+      <div class="hero-actions reveal d4">
+        <a class="btn btn-primary" href="#get-involved">Become a Volunteer</a>
+        <a class="btn btn-ghost" href="#get-involved">Support Our Work</a>
+      </div>
+    </div>
+
+    <svg class="constellation reveal d3" viewBox="0 0 420 380" aria-hidden="true">
+      <line class="wire" x1="80" y1="90"  x2="220" y2="60"  stroke="#BD9456" stroke-width="1.2"/>
+      <line class="wire" x1="220" y1="60" x2="340" y2="130" stroke="#4C6B58" stroke-width="1.2" style="animation-delay:.2s"/>
+      <line class="wire" x1="80" y1="90"  x2="150" y2="210" stroke="#4C6B58" stroke-width="1.2" style="animation-delay:.35s"/>
+      <line class="wire" x1="150" y1="210" x2="300" y2="250" stroke="#BD9456" stroke-width="1.2" style="animation-delay:.5s"/>
+      <line class="wire" x1="300" y1="250" x2="340" y2="130" stroke="#B5573B" stroke-width="1.2" style="animation-delay:.65s"/>
+      <line class="wire" x1="150" y1="210" x2="220" y2="60"  stroke="#3c5848" stroke-width="1"  style="animation-delay:.8s"/>
+      <line class="wire" x1="300" y1="250" x2="250" y2="330" stroke="#BD9456" stroke-width="1.2" style="animation-delay:.95s"/>
+
+      <circle class="ring" cx="220" cy="60" r="14" fill="none" stroke="#E4C99A" stroke-width="1"/>
+      <circle class="node" cx="80"  cy="90"  r="9"  fill="#B5573B" style="animation-delay:.1s"/>
+      <circle class="node" cx="220" cy="60"  r="11" fill="#BD9456" style="animation-delay:.4s"/>
+      <circle class="node" cx="340" cy="130" r="8"  fill="#4C6B58" style="animation-delay:.7s"/>
+      <circle class="node" cx="150" cy="210" r="10" fill="#E4C99A" style="animation-delay:1s"/>
+      <circle class="node" cx="300" cy="250" r="9"  fill="#B5573B" style="animation-delay:1.3s"/>
+      <circle class="node" cx="250" cy="330" r="7"  fill="#4C6B58" style="animation-delay:1.6s"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section class="about">
+  <div class="container">
+    <div>
+      <span class="eyebrow scroll-reveal">Who We Are</span>
+      <h2 class="scroll-reveal">A foundation built by volunteers, for the gaps no one else was filling.</h2>
+    </div>
+    <div class="about-body scroll-reveal">
+      <p>InAmigos started as a small group of students who kept noticing the same unmet needs — a child without a classroom, a family without a meal, an animal without anyone to call. Rather than picking one cause, we built six, each run by the volunteers and interns closest to the problem.</p>
+      <p>Every program stands on its own, with its own team and its own measure of success. Together, they're how InAmigos shows up across 28 states — not as a single charity, but as a working network of people who decided to stop waiting for someone else to start.</p>
+      <div class="value-row">
+        <span class="value-chip">Grassroots</span>
+        <span class="value-chip">Volunteer-Led</span>
+        <span class="value-chip">Statewide Reach</span>
+        <span class="value-chip">Intern-Built</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STATS ============ -->
+<section class="stats" id="impact">
+  <div class="container">
+    <div class="stat">
+      <div class="num">200+</div>
+      <div class="label">Active Volunteers</div>
+    </div>
+    <div class="stat">
+      <div class="num">28</div>
+      <div class="label">States Reached</div>
+    </div>
+    <div class="stat">
+      <div class="num">06</div>
+      <div class="label">Running Programs</div>
+    </div>
+    <div class="stat">
+      <div class="num">50,000+</div>
+      <div class="label">Lives Touched</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROGRAMS ============ -->
+<section class="programs" id="programs">
+  <div class="container">
+    <div class="programs-head">
+      <span class="eyebrow scroll-reveal">Our Programs</span>
+      <h2 class="scroll-reveal">Six causes, one direction.</h2>
+      <p class="scroll-reveal">Each program is a complete answer to a need we kept seeing repeat — run independently, measured honestly, and open to anyone willing to show up.</p>
+    </div>
+
+    <!-- Seva -->
+    <div class="program-row scroll-reveal">
+      <div class="icon-frame">
+        <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M10 32c3-9 12-13 22-13s19 4 22 13"/>
+          <path d="M14 32h36"/>
+          <path d="M26 14c0-3 1.5-5 1.5-5s1.5 2 1.5 5"/>
+          <path d="M35 14c0-3 1.5-5 1.5-5s1.5 2 1.5 5"/>
+        </svg>
+      </div>
+      <div>
+        <div class="program-meta">
+          <span class="program-num">01</span>
+          <span class="program-tag">Relief &amp; Essentials</span>
+        </div>
+        <h3>Seva</h3>
+        <p>Food, clothing, and everyday essentials, delivered straight into the hands of families who need them most. Seva is where InAmigos shows up first — and stays.</p>
+      </div>
+    </div>
+
+    <!-- Bachpanshala -->
+    <div class="program-row scroll-reveal">
+      <div class="icon-frame">
+        <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M8 16c8-5 16-5 24 0 8-5 16-5 24 0v30c-8-5-16-5-24 0-8-5-16-5-24 0z"/>
+          <path d="M32 16v30"/>
+        </svg>
+      </div>
+      <div>
+        <div class="program-meta">
+          <span class="program-num">02</span>
+          <span class="program-tag">Education &amp; Care</span>
+        </div>
+        <h3>Bachpanshala</h3>
+        <p>A classroom and a caregiver for children whose schooling would otherwise wait. Bachpanshala turns spare hours into steady, dependable education.</p>
+      </div>
+    </div>
+
+    <!-- Jeev -->
+    <div class="program-row scroll-reveal">
+      <div class="icon-frame">
+        <svg viewBox="0 0 64 64" fill="currentColor" stroke="none" aria-hidden="true">
+          <ellipse cx="32" cy="40" rx="13" ry="11"/>
+          <ellipse cx="14" cy="22" rx="6" ry="7.5" transform="rotate(-18 14 22)"/>
+          <ellipse cx="30" cy="14" rx="6" ry="7.5"/>
+          <ellipse cx="48" cy="22" rx="6" ry="7.5" transform="rotate(18 48 22)"/>
+          <ellipse cx="55" cy="36" rx="5" ry="6.5" transform="rotate(28 55 36)"/>
+        </svg>
+      </div>
+      <div>
+        <div class="program-meta">
+          <span class="program-num">03</span>
+          <span class="program-tag">Animal Welfare</span>
+        </div>
+        <h3>Jeev</h3>
+        <p>Rescue, treatment, and shelter for animals with no one else advocating for them. Jeev exists to give the voiceless a second chance.</p>
+      </div>
+    </div>
+
+    <!-- Udaan -->
+    <div class="program-row scroll-reveal">
+      <div class="icon-frame">
+        <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 34c10-20 20-20 26-9 6-11 16-11 26 9-10-6-18-6-26 3-8-9-16-9-26-3z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="program-meta">
+          <span class="program-num">04</span>
+          <span class="program-tag">Women Empowerment</span>
+        </div>
+        <h3>Udaan</h3>
+        <p>Skill-building and real opportunity, designed to help women move from dependence to direction. Udaan is named for flight — and it shows.</p>
+      </div>
+    </div>
+
+    <!-- Prakriti -->
+    <div class="program-row scroll-reveal">
+      <div class="icon-frame">
+        <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M32 10c18 4 18 28 0 44-18-16-18-40 0-44z"/>
+          <path d="M32 16v32"/>
+          <path d="M32 26c-5-2-9-1-9-1s2 5 9 6"/>
+          <path d="M32 36c5-2 9-1 9-1s-2 5-9 6"/>
+        </svg>
+      </div>
+      <div>
+        <div class="program-meta">
+          <span class="program-num">05</span>
+          <span class="program-tag">Environment</span>
+        </div>
+        <h3>Prakriti</h3>
+        <p>Clean-up drives and plantation work that give the land room to recover. Prakriti is the long game — planted today, felt for decades.</p>
+      </div>
+    </div>
+
+    <!-- Vikas -->
+    <div class="program-row scroll-reveal">
+      <div class="icon-frame">
+        <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="10" y="36" width="9" height="18"/>
+          <rect x="27" y="26" width="9" height="28"/>
+          <rect x="44" y="14" width="9" height="40"/>
+          <path d="M12 30l16-12 12 7 16-14"/>
+          <path d="M48 11h8v8"/>
+        </svg>
+      </div>
+      <div>
+        <div class="program-meta">
+          <span class="program-num">06</span>
+          <span class="program-tag">Youth &amp; Internship</span>
+        </div>
+        <h3>Vikas</h3>
+        <p>Internships and mentorship that turn ambition into real skill. Vikas is how today's interns become tomorrow's changemakers.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ QUOTE ============ -->
+<section class="quote-band">
+  <div class="container">
+    <blockquote class="scroll-reveal">Over 250 interns have chosen to stay — not as volunteers, but as permanent members of this family.</blockquote>
+    <div class="quote-sub">Our Goal — Uniting Minds for a Change</div>
+  </div>
+</section>
+
+<!-- ============ GET INVOLVED ============ -->
+<section class="involve" id="get-involved">
+  <div class="container">
+    <div class="involve-head">
+      <span class="eyebrow on-ink scroll-reveal">Get Involved</span>
+      <h2 class="scroll-reveal">Three ways into the network.</h2>
+      <p class="scroll-reveal">No grand gesture required — every program here started with someone giving a few hours, a few rupees, or a few months.</p>
+    </div>
+    <div class="involve-grid">
+      <div class="involve-card scroll-reveal">
+        <div class="num">01</div>
+        <h3>Volunteer</h3>
+        <p>Give a few hours a month to a cause you actually care about — no long-term contract, just consistent show-up.</p>
+        <a class="btn btn-ghost" href="mailto:support@inamigosfoundation.org.in">Become a Volunteer</a>
+      </div>
+      <div class="involve-card scroll-reveal">
+        <div class="num">02</div>
+        <h3>Donate</h3>
+        <p>Fund the essentials, the rescues, the classrooms — every rupee goes directly into one of our six programs.</p>
+        <a class="btn btn-ghost" href="mailto:support@inamigosfoundation.org.in">Support Our Work</a>
+      </div>
+      <div class="involve-card scroll-reveal">
+        <div class="num">03</div>
+        <h3>Intern</h3>
+        <p>Build real skills while building real impact — join the 250+ who turned an internship into a permanent home.</p>
+        <a class="btn btn-ghost" href="mailto:support@inamigosfoundation.org.in">Apply to Intern</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <span class="brand-text" style="font-size:1.15rem;">InAmigos<span>Foundation</span></span>
+        <p class="footer-tagline">Uniting minds for a change — six programs, one volunteer network, every state.</p>
+      </div>
+      <nav class="footer-links">
+        <a href="#top">Home</a>
+        <a href="#programs">Programs</a>
+        <a href="#impact">Impact</a>
+        <a href="#get-involved">Get Involved</a>
+        <a href="mailto:support@inamigosfoundation.org.in">support@inamigosfoundation.org.in</a>
+      </nav>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 InAmigos Foundation. All rights reserved.</span>
+      <span>Built by Team InAmigos</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
